@@ -5,12 +5,7 @@ const cors = require('cors');
 const cookie_parser = require('cookie-parser');
 const bodyParser = require('body-parser');
 
-/* http 연결 */
-const http = require('http');
-const httpServer = http.createServer(app);
-
 /* 모듈 적용 */
-
 // body-parser
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -26,6 +21,10 @@ const router = express.Router();
 
 const routeRouter = require('./router/r_route')(router);
 app.use('/route', routeRouter);
+
+app.listen(3333, function () {
+    console.log("server is running on port 3333");
+});
 
 
 

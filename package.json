@@ -4,7 +4,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "nodemon src/app.js"
   },
   "author": "seunghyun cho",
   "license": "ISC",
@@ -13,6 +13,7 @@
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
     "express": "^4.17.1",
+    "nodemon": "^2.0.4",
     "puppeteer": "^5.2.1",
     "xlsx": "^0.16.4"
   }

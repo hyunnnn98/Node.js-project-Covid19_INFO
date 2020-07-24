@@ -12,5 +12,7 @@ module.exports = (router) => {
         제공받은 데이터 상세보기
         @int dataset_id 값 받기.
     */ 
-   router.get('/info', ctrl.get_detail_data);
+   router.post('/info', ctrl.get_detail_data);
+
+   return router;
 }
