@@ -9,12 +9,17 @@
   "author": "seunghyun cho",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.19.2",
     "body-parser": "^1.19.0",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
     "express": "^4.17.1",
+    "interval-promise": "^1.4.0",
+    "mysql2": "^2.1.0",
+    "node-geocoder": "^3.27.0",
     "nodemon": "^2.0.4",
     "puppeteer": "^5.2.1",
+    "sequelize": "^6.3.3",
     "xlsx": "^0.16.4"
   }
 }

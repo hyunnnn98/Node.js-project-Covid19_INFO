@@ -5,6 +5,16 @@ const cors = require('cors');
 const cookie_parser = require('cookie-parser');
 const bodyParser = require('body-parser');
 
+/* 데이터베이스 연결 */
+const models = require("./models/index.js");
+
+models.sequelize.sync().then(() => {
+    console.log(" DB connect");
+}).catch(err => {
+    console.log(" DB connect fail");
+    console.log(err);
+});
+
 /* 모듈 적용 */
 // body-parser
 app.use(bodyParser.json());
@@ -19,8 +29,8 @@ app.use(cookie_parser());
 /* 라우터 호출 */
 const router = express.Router();
 
-const routeRouter = require('./router/r_route')(router);
-app.use('/route', routeRouter);
+const listRouter = require('./router/r_list')(router);
+app.use('/list', listRouter);
 
 app.listen(3333, function () {
     console.log("server is running on port 3333");

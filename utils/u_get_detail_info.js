@@ -1,85 +1,67 @@
 // module
-const puppeteer = require('puppeteer');
+const axios = require('axios');
 
-const get_detail_info = async (start_point_value, end_point_value, _id) => {
+const myAxios = axios.create({ timeout: 1000 });
+
+const get_list_count = async () => {
+    url = `http://openapi.seoul.go.kr:8088/757557487074796a353361677a536f/json/LOCALDATA_093011/1/1/`;
+    const { data } = await myAxios.get(url);
+    return await data['LOCALDATA_093011'].list_total_count;
+}
+
+const get_detail_info = async () => {
+    // 영업중 데이터 저장
+    let arr_data = [];
     try {
-        _id = _id + 2;
-        console.log(_id);
-        const browser = await puppeteer.launch({ headless: false, args: ['--window-size=1520,1080', '--disable-notifications'] });
+        // 개수 설정
+        const count = await get_list_count();
+        let temp = parseInt(count / 1000);
+        let url = null;
 
-        const page = await browser.newPage();
-        await page.setViewport({
-            width: 1080,
-            height: 1080,
-        })
+        // 천번대 데이터 바인딩
+        for (let i = 0; i < temp; i++) {
+            url = `http://openapi.seoul.go.kr:8088/757557487074796a353361677a536f/json/LOCALDATA_093011/${(i * 1000) + 1}/${(i + 1) * 1000}/`;
+            let { data } = await myAxios.get(url);
+            await data['LOCALDATA_093011'].row.forEach(element => {
+                temp_val = parseInt(element.TRDSTATEGBN);
+                if (temp_val === 1 && element.APVCANCELYMD.length == 0) arr_data.push(element);
+            });
+        }
 
-        await page.goto('https://map.kakao.com/?target=car');
-
-        // 다음 길찾기 접속 -> 왼쪽 길찾기 엘리먼트 불러올때까지 대기
-        await page.waitForSelector('.menu');
-
-        // 출발지 입력
-        await page.evaluate(async (start_point_value) => {
-            // 출발지 도착지 엘리먼트 로딩.
-            const start_point = document.querySelectorAll('.valueBox')[0];
-            start_point.value = start_point_value;
-            start_point.click();
-        }, start_point_value);
-        await page.waitFor(1000);
-        await page.keyboard.press('Enter');
-        await page.waitFor(1000);
-
-        // 도착지 입력
-        await page.evaluate(async (end_point_value) => {
-            // 도착지 엘리먼트 로딩.
-            const end_point = document.querySelectorAll('.valueBox')[1];
-            end_point.value = end_point_value;
-            end_point.click();
-        }, end_point_value);
-
-        await page.waitFor(1000);
-        await page.keyboard.press('Enter');
-        await page.waitFor(1000);
-
-        // 다음 웹페이지 튜토리얼 제거.
-        await page.mouse.move(0, 200);
-        await page.mouse.click(0, 200);
-
-        // 교통수단 : 버스 설정
-        await page.evaluate(() => {
-            document.querySelector('#transittab').click();
+        // 1000번대 나머지 비교
+        url = `http://openapi.seoul.go.kr:8088/757557487074796a353361677a536f/json/LOCALDATA_093011/${(1000 * temp) + 1}/${count}/`;
+        let { data } = await myAxios.get(url);
+        await data['LOCALDATA_093011'].row.forEach(element => {
+            temp_val = parseInt(element.TRDSTATEGBN);
+            if (temp_val === 1 && element.APVCANCELYMD.length == 0) arr_data.push(element);
         });
 
-        await page.waitForSelector('.list.bustab');
-
-        await page.evaluate(() => {
-            document.querySelector('.list.bustab').click();
-        });
-
-        // 상세정보 불러올때까지 대기
-        await page.waitForSelector('.TransitTotalPanel');
-        console.log('상세정보가져오기');
-        // 상세정보 가져오기
-        await page.evaluate(async () => {
-            document.querySelector(`li.TransitRouteItem.busOnly:nth-child(${_id}) .title`).click();
-            // document.querySelector(`li.TransitRouteItem.busOnly:nth-child(${_id}) .title`).click();
-            // document.querySelector(`li.TransitRouteItem.busOnly:nth-child(${_id})`).click();
-        }, _id);
-        
-        console.log('test1');
-        await page.waitFor(1000);
-
-        // const data = await page.evaluate(async () => {
-        //     let get_route_detail_tag = document.querySelectorAll(`.TransitRouteItem.busOnly:nth-child(${_id}) ol .TransitPointItem ol li`);
-        //     await get_route_detail_tag.click();
-
-        // }, _id);
-
-        // await page.close();
-        // await browser.close();
-
-        return data;
+        console.log(arr_data.length);
+        let final_arr = [];
+        // x , y값 넣기.
+        for (let i = 0; i < arr_data.length; i++) {
+            add = (arr_data[i].RDNWHLADDR != "") ? arr_data[i].RDNWHLADDR : arr_data[i].SITEWHLADDR;
+            add = encodeURI(add);
+            url = 'https://dapi.kakao.com/v2/local/search/address.json?query=' + add;
+            // console.log('url: ', url);
+            await myAxios.get(url, {
+                headers: {
+                    Authorization: 'KakaoAK f01dcaead85b5ba96ef7f16a75ee6497',
+                    Host: 'dapi.kakao.com'
+                }
+            }).then(async res => {
+                arr_data[i].lat = await res.data.documents[0].y;
+                arr_data[i].lng = await res.data.documents[0].x;
+            }).catch(e => {
+                console.log(e);
+            })
+            setTimeout(async () => {
+                console.log("저장..");
+            }, 1000);
+        }
+        return arr_data;
     } catch (e) {
+        console.log('에러발생: ', e)
         return false;
     }
 };
