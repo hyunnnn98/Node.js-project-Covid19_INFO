@@ -16,10 +16,7 @@
     "express": "^4.17.1",
     "interval-promise": "^1.4.0",
     "mysql2": "^2.1.0",
-    "node-geocoder": "^3.27.0",
     "nodemon": "^2.0.4",
-    "puppeteer": "^5.2.1",
-    "sequelize": "^6.3.3",
-    "xlsx": "^0.16.4"
+    "sequelize": "^6.3.3"
   }
 }

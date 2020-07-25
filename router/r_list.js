@@ -10,5 +10,9 @@ module.exports = (router) => {
 
     router.post('/reset', ctrl.set_detail_data);
 
+    router.post('/company_search', ctrl.get_search_company_data);
+
+    router.post('/gu_search', ctrl.get_search_gu_data);
+
    return router;
 }

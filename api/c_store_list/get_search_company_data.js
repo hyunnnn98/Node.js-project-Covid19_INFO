@@ -7,14 +7,13 @@ const { Op } = sequelize;
 const models = require("../../models");
 const Store = models.Store;
 
-let get_detail_data = async (req, res) => {
-    let { start_lat, end_lat, start_lng, end_lng } = await req.body;
-    start_lat = parseFloat(start_lat);
+let get_search_company_data = async (req, res) => {
+    let { company_name } = await req.body;
+    console.log(company_name);
 
     let data = await Store.findAll({
         where: {
-            lat: { [Op.gte]: start_lat, [Op.lte]: end_lat },
-            lng: { [Op.gte]: start_lng, [Op.lte]: end_lng },
+            BPLCNM: { [Op.like]: "%" + company_name + "%" },
         },
     });
     console.log('getData: ', data.length);
@@ -27,4 +26,4 @@ let get_detail_data = async (req, res) => {
 
 }
 
-module.exports = get_detail_data;
+module.exports = get_search_company_data;
