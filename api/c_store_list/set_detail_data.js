@@ -7,7 +7,6 @@ const models = require("../../models");
 const Store = models.Store;
 
 let set_detail_data = async (req, res) => {
-    // let { lat, lng } = req.body;
     const data = await detail_info();
     data.forEach(async (v) => {
         let { MGTNO, APVPERMYMD, SITETEL, SITEWHLADDR, RDNWHLADDR, BPLCNM, DISFETVEHGARAR, MICROSPKLNUM, HNDUSESTLZNUM, DYNPWSPRAYNUM, HDOPTDSPRAYNUM, GMKNUM, PROTGLSNUM, PROTUSECLOTNUM, VACUCLERNUM } = v;

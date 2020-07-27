@@ -1,7 +1,18 @@
 // module
 const axios = require('axios');
 
+// models
+const models = require("../models");
+const Store = models.Store;
+
 const myAxios = axios.create({ timeout: 1000 });
+
+const db_delete_all_data = async () => {
+    return await Store.destroy({
+        where: {},
+        truncate: true
+    })
+}
 
 const get_list_count = async () => {
     url = `http://openapi.seoul.go.kr:8088/757557487074796a353361677a536f/json/LOCALDATA_093011/1/1/`;
@@ -10,6 +21,8 @@ const get_list_count = async () => {
 }
 
 const get_detail_info = async () => {
+    // 기존 데이터 삭제
+    db_delete_all_data();
     // 영업중 데이터 저장
     let arr_data = [];
     try {
@@ -40,10 +53,11 @@ const get_detail_info = async () => {
         let final_arr = [];
         // x , y값 넣기.
         for (let i = 0; i < arr_data.length; i++) {
-            add = (arr_data[i].RDNWHLADDR != "") ? arr_data[i].RDNWHLADDR : arr_data[i].SITEWHLADDR;
+            // 주소 변환 
+            add = (arr_data[i].RDNWHLADDR != "" ? arr_data[i].RDNWHLADDR : arr_data[i].SITEWHLADDR).split(',')[0];
             add = encodeURI(add);
             url = 'https://dapi.kakao.com/v2/local/search/address.json?query=' + add;
-            // console.log('url: ', url);
+
             await myAxios.get(url, {
                 headers: {
                     Authorization: 'KakaoAK f01dcaead85b5ba96ef7f16a75ee6497',

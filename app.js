@@ -4,6 +4,7 @@ const app = express();
 const cors = require('cors');
 const cookie_parser = require('cookie-parser');
 const bodyParser = require('body-parser');
+const update = require('./utils/u_data_update');
 
 /* 데이터베이스 연결 */
 const models = require("./models/index.js");
@@ -35,6 +36,9 @@ app.use('/list', listRouter);
 app.listen(3333, function () {
     console.log("server is running on port 3333");
 });
+
+/* 1일 1 업데이트 기준 (월 ~ 금) : 0:00 */
+update();
 
 
 
