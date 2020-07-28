@@ -1,15 +1,13 @@
 # COVID19_YSS
 
-[제 3회 정부혁신제안 끝장개발대회](http://civichack.or.kr/?) - Your Safe Space (YSS)
+[제 3회 정부혁신제안 끝장개발대회](http://civichack.or.kr/?) - TEMPTEMPYou're Safe Space (YSS)
 
-<img width="888" alt="KakaoTalk_Photo_2020-07-28-00-08-46" src="https://user-images.githubusercontent.com/53788601/88558493-913a9a80-d066-11ea-8746-71084deeca69.png">
+<img width="100%" alt="KakaoTalk_Photo_2020-07-28-15-05-29" src="https://user-images.githubusercontent.com/53788601/88626189-2bd9be80-d0e5-11ea-9789-c3fed441ad54.png">
 
 ## 와이거 팀원 소개
 
-- 정재순(팀장) : 공공 데이터 API / 자료 정리, DB 설계
-- 이구슬(디자이너) : 웹 디자인 및 UI / UX 구성
-- 이재원(프론트 엔드) : React.js 웹 페이지 개발
-- 조승현(백 엔드) : Node.js 자체 API 개발
+<img width="100%" alt="KakaoTalk_Photo_2020-07-28-15-01-41" src="https://user-images.githubusercontent.com/53788601/88626233-44e26f80-d0e5-11ea-8a16-55b5f8a504e4.png">
+
 
 ## 프로젝트 소개 및 제안 이유
 
